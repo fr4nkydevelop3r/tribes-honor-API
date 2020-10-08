@@ -25,8 +25,6 @@ exports.userSigninValidator = [
 
 exports.forgotPasswordValidator = [
     check('email')
-    .not()
-    .isEmpty()
     .isEmail()
     .withMessage('Must be a valid email address'),
 
