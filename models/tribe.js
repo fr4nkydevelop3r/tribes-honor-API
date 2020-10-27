@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const TribesSchema = new mongoose.Schema({
+const TribeSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
@@ -23,6 +23,18 @@ const TribesSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  location: {
+    type: String,
+    required: true,
+  },
+  difficulty: {
+    type: String,
+    required: true,
+  },
+  rank: {
+    type: String,
+    required: true,
+  },
 });
 
-module.exports = Tribes = mongoose.model('tribes', TribesSchema);
+module.exports = Tribe = mongoose.model('tribe', TribeSchema);
