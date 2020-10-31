@@ -23,6 +23,8 @@ exports.getTribes = async (req, res) => {
         idTribe: tribe._id,
       }).lean();
 
+      console.log(members);
+
       //Add members to tribe
       let membersInfo = members.map(async (member) => {
         let user = await User.findById(
@@ -88,6 +90,25 @@ exports.getTribes = async (req, res) => {
         }
       })
       .catch((err) => console.log(err));
+  } catch (e) {
+    console.error(e.message);
+    res.status(500).send('Server Error');
+  }
+};
+
+exports.getTribe = async (req, res) => {
+  try {
+    const { idTribe } = req.query;
+    const tribe = await Tribe.findOne({
+      _id: idTribe,
+    });
+    if (tribe) {
+      res.json(tribe);
+    } else {
+      return res.status(404).json({
+        error: 'No tribe was found',
+      });
+    }
   } catch (e) {
     console.error(e.message);
     res.status(500).send('Server Error');
