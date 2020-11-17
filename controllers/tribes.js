@@ -101,14 +101,75 @@ exports.getTribe = async (req, res) => {
     const { idTribe } = req.query;
     const tribe = await Tribe.findOne({
       _id: idTribe,
-    });
+    }).lean();
     if (tribe) {
+      const category = await Category.findOne({
+        _id: tribe.idCategory,
+      });
+      tribe.category = category.name;
       res.json(tribe);
     } else {
       return res.status(404).json({
         error: 'No tribe was found',
       });
     }
+  } catch (e) {
+    console.error(e.message);
+    res.status(500).send('Server Error');
+  }
+};
+
+exports.addTribe = async (req, res) => {
+  try {
+    const {
+      name,
+      category,
+      description,
+      mision,
+      outcome,
+      location,
+      video,
+    } = req.body;
+
+    let categoryId = await Category.findOne({
+      name: category,
+    }).lean();
+    if (!categoryId) {
+      //create new category and get the id of the new category
+      let newCategory = new Category({ name: category });
+      let cat = await newCategory.save();
+      categoryId = cat._id;
+    }
+
+    console.log(categoryId);
+
+    let tribe = new Tribe({
+      name,
+      idCategory: categoryId,
+      createdAt: new Date(),
+      description,
+      mision,
+      outcome,
+      videoMaster: video,
+      location,
+    });
+
+    tribe.save((err, data) => {
+      if (err) {
+        console.log('ERROR SAVING THE TRIBE', err);
+        return res.status(400).json({
+          error: 'Error saving the tribe',
+        });
+      }
+      res.json({
+        message: `Great! You got a lot of power on your hands.`,
+      });
+    });
+
+    //if search of category is true, get the id of the category and add it to tribe,
+    //if not create a new category and return the id
+
+    //when you have the id of the category ready add the tribe
   } catch (e) {
     console.error(e.message);
     res.status(500).send('Server Error');

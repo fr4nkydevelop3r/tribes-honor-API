@@ -57,3 +57,13 @@ exports.update = (req, res) => {
     });
   });
 };
+
+exports.getUsers = async (req, res) => {
+  try {
+    const { idsUsers } = req.query;
+    console.log(idsUsers);
+  } catch (e) {
+    console.error(e.message);
+    res.status(500).send('Server Error');
+  }
+};

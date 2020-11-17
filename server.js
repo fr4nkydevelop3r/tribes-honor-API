@@ -16,13 +16,14 @@ mongoose
     useCreateIndex: true,
   })
   .then(() => console.log('DB connected'))
-  .catch(err => console.log('DB CONNECTION ERROR', err));
+  .catch((err) => console.log('DB CONNECTION ERROR', err));
 
 //import routes
 
 const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/user');
 const tribesRoutes = require('./routes/tribes');
+const membersRoutes = require('./routes/members');
 
 //app middlewares
 app.use(morgan('dev')); //with this you can see the request in the console
@@ -38,6 +39,7 @@ if ((process.env.NODE_ENV = 'development')) {
 app.use('/api', authRoutes);
 app.use('/api', userRoutes);
 app.use('/api', tribesRoutes);
+app.use('/api', membersRoutes);
 
 const port = process.env.PORT || 8000;
 

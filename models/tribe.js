@@ -27,11 +27,7 @@ const TribeSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  difficulty: {
-    type: String,
-    required: true,
-  },
-  rank: {
+  videoMaster: {
     type: String,
     required: true,
   },

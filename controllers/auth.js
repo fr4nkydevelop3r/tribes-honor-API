@@ -37,12 +37,12 @@ exports.signup = (req, res) => {
 
     sgMail
       .send(emailData)
-      .then(sent => {
+      .then((sent) => {
         return res.json({
           message: `Email has been sent to ${email}. Follow the instructions to activate your account.`,
         });
       })
-      .catch(error => {
+      .catch((error) => {
         console.log('SIGNUP EMAIL SENT ERROR', error);
         return res.json({
           message: err.message,
@@ -54,7 +54,7 @@ exports.signup = (req, res) => {
 exports.accountActivation = (req, res) => {
   const { token } = req.body;
   if (token) {
-    jwt.verify(token, process.env.JWT_ACCOUNT_ACTIVATION, function(
+    jwt.verify(token, process.env.JWT_ACCOUNT_ACTIVATION, function (
       err,
       decoded,
     ) {
@@ -89,7 +89,7 @@ exports.accountActivation = (req, res) => {
 exports.signin = async (req, res) => {
   try {
     const user = await User.findOne({ email: req.body.email }).exec();
-
+    console.log(req.body);
     if (!user) {
       return res.status(400).json({
         error: 'User with that email does not exist. Please signup',
@@ -184,12 +184,12 @@ exports.forgotPassword = (req, res) => {
         } else {
           sgMail
             .send(emailData)
-            .then(sent => {
+            .then((sent) => {
               return res.json({
                 message: `Email has been sent to ${email}. Follow the instructions to reset your password.`,
               });
             })
-            .catch(error => {
+            .catch((error) => {
               console.log('SIGNUP EMAIL SENT ERROR', error);
               return res.json({
                 message: err.message,
@@ -207,7 +207,7 @@ exports.resetPassword = (req, res) => {
     jwt.verify(
       resetPasswordLink,
       process.env.JWT_RESET_PASSWORD,
-      function(err, decoded) {
+      function (err, decoded) {
         if (err) {
           return res.status(400).json({
             error: 'Expired link, try again',
@@ -253,7 +253,7 @@ exports.googleLogin = (req, res) => {
       idToken,
       audience: process.env.GOOGLE_CLIENT_ID,
     })
-    .then(response => {
+    .then((response) => {
       console.log('GOOGLE LOGIN RESPONSE', response);
       const { email_verified, name, email } = response.payload;
       if (email_verified) {
@@ -307,8 +307,8 @@ exports.facebookLogin = (req, res) => {
   return fetch(url, {
     method: 'GET',
   })
-    .then(response => response.json())
-    .then(response => {
+    .then((response) => response.json())
+    .then((response) => {
       console.log(`FACEBOOK RESPONSE'  ${JSON.stringify(response)}`);
       const { email, name } = response;
       if (!email) {
@@ -353,7 +353,7 @@ exports.facebookLogin = (req, res) => {
         }
       });
     })
-    .catch(error => {
+    .catch((error) => {
       res.json({
         error: 'Facebook login Failed. Try later',
       });
